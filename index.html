@@ -980,6 +980,16 @@
         </div>
       </div>
       <div class="settings-section">
+        <div class="settings-section-title">Notifications</div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-label">Enable notifications</div>
+            <div class="settings-row-sub" id="notif-status-sub">Checking...</div>
+          </div>
+          <button class="upload-btn" id="notif-request-btn">Enable</button>
+        </div>
+      </div>
+      <div class="settings-section">
         <div class="settings-section-title">About</div>
         <div class="settings-row">
           <div class="settings-row-label">About this app</div>
@@ -1153,6 +1163,40 @@
       ns.forEach(n=>n.close());
     }catch(e){}
   }
+
+  function updateNotifStatus(){
+    const sub=document.getElementById('notif-status-sub');
+    const btn=document.getElementById('notif-request-btn');
+    if(!sub||!btn)return;
+
+    const isStandalone=window.navigator.standalone===true||
+      window.matchMedia('(display-mode:standalone)').matches;
+
+    if(!('Notification' in window)){
+      sub.textContent='Not supported on this device';
+      btn.style.display='none';return;
+    }
+    if(!isStandalone){
+      sub.textContent='Open from your Home Screen icon, not Safari';
+      btn.style.display='none';return;
+    }
+    if(Notification.permission==='granted'){
+      sub.textContent='Notifications enabled ✓';
+      btn.textContent='Enabled';btn.style.opacity='0.5';btn.disabled=true;return;
+    }
+    if(Notification.permission==='denied'){
+      sub.textContent='Blocked — go to iOS Settings → RouTine → Notifications';
+      btn.style.display='none';return;
+    }
+    sub.textContent='Tap to allow timer and reminder alerts';
+    btn.style.display='';btn.style.opacity='';btn.disabled=false;btn.textContent='Enable';
+  }
+
+  document.getElementById('notif-request-btn').addEventListener('click',async()=>{
+    const granted=await requestNotifPermission();
+    updateNotifStatus();
+    if(granted)showToast('Notifications enabled ✓');
+  });
 
   /* ═══════════════════════════════════════════════════════
      UTILITY FUNCTIONS
@@ -1652,6 +1696,7 @@
     document.getElementById('settings-overlay').classList.add('open');
     document.getElementById('weather-api-key').value=cfg.weatherApiKey||'';
     document.getElementById('weather-location').value=cfg.weatherLocation||'';
+    updateNotifStatus();
   }
   function closeSettings(){
     cfg.weatherApiKey=document.getElementById('weather-api-key').value.trim();
