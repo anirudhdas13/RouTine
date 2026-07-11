@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#f7f6f2" id="theme-meta">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <title>RouTine v1.4.0</title>
+  <title>RouTine v1.4.1</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script>
     (function(){
@@ -620,14 +620,14 @@
 
 <div id="splash">
   <div class="splash-logo">Rou<b>Tine</b></div>
-  <div class="splash-ver">4.0</div>
+  <div class="splash-ver">v1.4.1</div>
 </div>
 
 <div class="menu-overlay" id="menu-overlay"></div>
 <div class="side-menu" id="side-menu">
   <div class="menu-header">
     <div class="menu-logo">Rou<b>Tine</b></div>
-    <div class="menu-version">v1.4.0</div>
+    <div class="menu-version">v1.4.1</div>
   </div>
   <div class="menu-nav">
     <div class="menu-item active" id="mn-today" onclick="setView('tasks');closeMenu()">
@@ -1389,7 +1389,7 @@
   }
   function confirmDelTask(id){
     closeSwipe(id);const t=tasks.find(x=>x.id===id);if(!t)return;
-    showConfirm(`Delete "${t.name}"?`,'This cannot be undone.',()=>{if(activeTimerId===id)stopTimer();cancelNotif(id);tasks=tasks.filter(x=>x.id!==id);saveAll();render();showToast('Task deleted');
+    showConfirm(`Delete "${t.name}"?`,'This cannot be undone.',()=>{if(activeTimerId===id)stopTimer();cancelNotif(id);tasks=tasks.filter(x=>x.id!==id);saveAll();render();showToast('Task deleted');});
   }
   function openEditTask(id){
     closeSwipe(id);const t=tasks.find(x=>x.id===id);if(!t)return;
